@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUXURY UPI · payment page</title>
+    <!-- subtle gold/white background from vecteezy (luxury texture) -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000; /* fallback */
+            background-image: url('https://static.vecteezy.com/system/resources/previews/010/999/821/original/luxury-white-and-gold-background-free-vector.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        /* soft overlay to keep card readable & maintain luxury feel */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 245, 220, 0.15), rgba(0,0,0,0.2) 80%);
+            pointer-events: none;
+        }
+
+        .card {
+            max-width: 520px;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.82);  /* black-transparent base */
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(255, 215, 120, 0.35);
+            border-radius: 42px;
+            padding: 2.2rem 2rem 2.5rem;
+            box-shadow: 0 40px 70px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(230, 200, 120, 0.2) inset, 0 0 30px rgba(210, 180, 100, 0.3);
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* gold inner glow */
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border-radius: 36px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            pointer-events: none;
+        }
+
+        .luxury-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .luxury-header h1 {
+            font-size: 2.1rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            color: #f8eac7;
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.5);
+            text-transform: uppercase;
+            word-spacing: 6px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 12px 0 15px;
+        }
+
+        .divider-line {
+            height: 1px;
+            width: 80px;
+            background: linear-gradient(90deg, transparent, #e9c47e, transparent);
+        }
+
+        .amount-badge {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #d4af37;
+            border-radius: 100px;
+            padding: 0.5rem 2rem;
+            display: inline-block;
+            margin: 0 auto 1.8rem;
+            backdrop-filter: blur(4px);
+        }
+
+        .amount-badge span {
+            font-size: 2.6rem;
+            font-weight: 400;
+            color: #f5d97b;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px #b8860b;
+        }
+        .amount-badge .rupee-symbol {
+            font-size: 2rem;
+            margin-right: 5px;
+            color: #f0c45a;
+        }
+
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0 2.2rem;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.7));
+        }
+
+        .qr-frame {
+            background: #111217;
+            padding: 15px;
+            border-radius: 30px;
+            border: 1px solid #c5a028;
+            box-shadow: 0 0 0 3px rgba(20, 15, 5, 0.8), 0 20px 30px -10px black;
+        }
+
+        .qr-frame img {
+            display: block;
+            width: 260px;
+            height: 260px;
+            border-radius: 18px;
+            background: white; /* QR bg is white, fine */
+            object-fit: cover;
+        }
+
+        .upi-id {
+            text-align: center;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 0.8rem;
+            border-radius: 60px;
+            border: 1px dashed #d4af37;
+            margin: 0.5rem 0 1.5rem;
+            color: #e0caa5;
+            word-break: break-all;
+        }
+        .upi-id strong {
+            color: #f5e2b2;
+            font-weight: 500;
+            background: rgba(218,165,32,0.1);
+            padding: 4px 12px;
+            border-radius: 40px;
+        }
+
+        /* ---------- THE BUTTON (exact given styles + luxury touch) ---------- */
+        .button {
+            cursor: pointer;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #000;  /* black base as given */
+            border-radius: 12px;
+            border: none;
+            padding: 12px 18px;
+            color: #fff;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.8), 0 0 10px #94762330;
+            transition: all 0.2s;
+        }
+
+        .button:hover {
+            background: #1a1a1a;
+            border-color: #f5c84e;
+            box-shadow: 0 8px 25px black, 0 0 18px #e5b73b;
+        }
+
+        .fold {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #444, #000);
+            border-bottom-left-radius: 6px;
+            z-index: 5;
+        }
+
+        .points_wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+        }
+
+        .point {
+            position: absolute;
+            bottom: -10px;
+            width: 3px;
+            height: 3px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 6px white;
+            animation: floating-points infinite ease-in-out;
+        }
+
+        .point:nth-child(1) { left: 10%; animation-duration: 2.2s; }
+        .point:nth-child(2) { left: 30%; animation-duration: 2.4s; }
+        .point:nth-child(3) { left: 25%; animation-duration: 2s; }
+        .point:nth-child(4) { left: 45%; animation-duration: 1.9s; }
+        .point:nth-child(5) { left: 50%; animation-duration: 1.8s; }
+        .point:nth-child(6) { left: 70%; animation-duration: 1.7s; }
+        .point:nth-child(7) { left: 85%; animation-duration: 2.1s; }
+        .point:nth-child(8) { left: 60%; animation-duration: 2.3s; }
+        .point:nth-child(9) { left: 95%; animation-duration: 2.5s; }
+        .point:nth-child(10) { left: 65%; animation-duration: 2.2s; }
+
+        @keyframes floating-points {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-60px); opacity: 0; }
+        }
+
+        .inner {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            z-index: 2;
+            width: 100%;
+        }
+
+        .upi-circle {
+            width: 28px;
+            height: 28px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+
+        .upi-circle img {
+            width: 20px;
+            height: auto;
+            filter: brightness(0.9);
+        }
+        /* ---------- end exact button styles ---------- */
+
+        .note {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #ab9e81;
+            text-align: center;
+            letter-spacing: 0.3px;
+            border-top: 1px solid rgba(212, 175, 55, 0.25);
+            padding-top: 18px;
+        }
+        .note a {
+            color: #fad676;
+            text-decoration: none;
+        }
+
+        .hash-hint {
+            background: rgba(0,0,0,0.4);
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: #b7a36b;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* small extra */
+        .pay-options {
+            display: flex;
+            gap: 8px;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="luxury-header">
+        <h1>✦ ELITE PAY ✦</h1>
+        <div class="divider">
+            <span class="divider-line"></span>
+            <span style="color:#d2aa5c;">⍟</span>
+            <span class="divider-line"></span>
+        </div>
+    </div>
+
+    <!-- amount from hash will be displayed dynamically -->
+    <div style="text-align:center;">
+        <div class="hash-hint" id="hashHint">⏎ reading URL hash ...</div>
+    </div>
+
+    <div class="amount-badge" id="amountBadge">
+        <span><span class="rupee-symbol">₹</span><span id="displayAmount">0</span></span>
+    </div>
+
+    <!-- QR code area (dynamic via hash) -->
+    <div class="qr-container" id="qrContainer">
+        <div class="qr-frame">
+            <img src="" alt="UPI QR" id="qrImage" />
+        </div>
+    </div>
+
+    <div class="upi-id" id="upiField">
+        <strong>vikramdesai3468@ybl</strong>
+    </div>
+
+    <!-- the exact button with particles, fold, upi circle -->
+    <div class="pay-options">
+        <button type="button" class="button" id="openUpiBtn">
+            <span class="fold"></span>
+            <div class="points_wrapper">
+                <i class="point"></i><i class="point"></i><i class="point"></i><i class="point"></i><i class="point"></i>
+                <i class="point"></i><i class="point"></i><i class="point"></i><i class="point"></i><i class="point"></i>
+            </div>
+            <span class="inner">
+                <span class="upi-circle">
+                    <img src="https://www.npci.org.in/uploads/UPI_18c43f674e.svg" class="icon" alt="UPI">
+                </span>
+                Open UPI to Pay
+            </span>
+        </button>
+    </div>
+
+    <div class="note">
+        ⚜️  secure hash-based amount • tap button to pay via UPI app
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ----- configuration ----
+        const VPA = 'vikramdesai3468@ybl';
+        // Default name (can be overridden via hash? but spec uses {name} placeholder, we set a fixed name for luxury)
+        const DEFAULT_NAME = 'LUXURY GUEST';
+
+        // references
+        const qrImg = document.getElementById('qrImage');
+        const displayAmountSpan = document.getElementById('displayAmount');
+        const hashHint = document.getElementById('hashHint');
+        const upiField = document.getElementById('upiField');
+        const openBtn = document.getElementById('openUpiBtn');
+
+        // function to extract amount from hash (supports #amount, e.g. #1000, #500)
+        function getAmountFromHash() {
+            let hash = window.location.hash;
+            if (!hash || hash === '#') {
+                return null; // no amount specified
+            }
+            // remove leading '#'
+            hash = hash.substring(1);
+            // if hash contains only digits (optionally decimal? but typical UPI amount integer)
+            if (/^\d+$/.test(hash)) {
+                return parseInt(hash, 10);
+            } else if (/^\d+(\.\d{1,2})?$/.test(hash)) {
+                // if float with max 2 decimals, parseFloat but we'll use number
+                return parseFloat(hash);
+            }
+            return null; // not a valid amount pattern
+        }
+
+        let currentAmount = 0; // default fallback, but we treat no-hash as not set
+        let rawAmount = getAmountFromHash();
+
+        // if no valid hash amount, default to 1999 (as luxury showpiece, but we'll indicate)
+        if (rawAmount === null) {
+            currentAmount = 1999;  // elegant default amount
+            hashHint.innerHTML = `⚡ no hash amount · showing ₹1999 (use #amount)`;
+        } else {
+            currentAmount = rawAmount;
+            hashHint.innerHTML = `⛁ hash decoded: ₹${currentAmount}`;
+        }
+
+        // format amount for display
+        displayAmountSpan.innerText = currentAmount;
+
+        // Prepare UPI QR code link with the current amount and a fixed name (could be dynamic if needed)
+        // using the exact API pattern: https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=upi://pay?pa=vikramdesai3468@ybl&pn={name}&am={amount}&cu=INR
+        // We'll encode the name as "Luxury%20User" or something premium
+        const upiName = encodeURIComponent('Luxury Client');
+        const upiAmount = currentAmount;
+
+        // Build upi:// string
+        const upiLink = `upi://pay?pa=${VPA}&pn=${upiName}&am=${upiAmount}&cu=INR`;
+
+        // QR code URL
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiLink)}`;
+        qrImg.src = qrUrl;
+
+        // also set fallback if QR fails (but it's fine)
+        qrImg.alt = `UPI QR for ₹${currentAmount}`;
+
+        // update upi field with amount as subtle reminder
+        upiField.innerHTML = `<strong>${VPA}</strong>  ·  amt ₹${currentAmount}`;
+
+        // -------- BUTTON CLICK: open UPI intent ------------
+        openBtn.addEventListener('click', function() {
+            // construct UPI intent link (same upi:// scheme)
+            // some browsers may not handle, but we try
+            const intentUrl = upiLink;  // upi://pay?pa=...&pn=...&am=...
+
+            // For Android, we can use intent:// scheme? but simplest: try to change window location
+            // create an invisible anchor with upi scheme
+            const a = document.createElement('a');
+            a.href = intentUrl;
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+
+            // fallback: if not opened within 300ms, show a small toast? but we just let it go.
+            setTimeout(() => {
+                document.body.removeChild(a);
+            }, 500);
+
+            // optional also show a message (but not required)
+        });
+
+        // extra: handle hashchange event to update page without reload (optional luxury)
+        window.addEventListener('hashchange', function() {
+            let newRaw = getAmountFromHash();
+            if (newRaw !== null) {
+                currentAmount = newRaw;
+                hashHint.innerHTML = `⛁ hash updated: ₹${currentAmount}`;
+            } else {
+                currentAmount = 1999;
+                hashHint.innerHTML = `⚡ hash removed · default ₹1999`;
+            }
+            displayAmountSpan.innerText = currentAmount;
+            // update qr
+            const updatedUpiLink = `upi://pay?pa=${VPA}&pn=${encodeURIComponent('Luxury Client')}&am=${currentAmount}&cu=INR`;
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(updatedUpiLink)}`;
+            upiField.innerHTML = `<strong>${VPA}</strong>  ·  amt ₹${currentAmount}`;
+        });
+
+        // load fallback: if QR image error, show subtle
+        qrImg.onerror = function() {
+            qrImg.style.background = '#222';
+            qrImg.alt = 'QR generation unavailable';
+        };
+
+        // set initial upi link on button 'open' alternative? already used upiLink var
+    })();
+</script>
+
+<!-- optional: ensure that background is fully visible, add minor gold glitter (via pseudo) -->
+</body>
+</html>
