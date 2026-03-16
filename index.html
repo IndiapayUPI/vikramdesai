@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>classic pay · gold edition</title>
-    <!-- pure gold-white background (vecteezy) + classic black-transparent card -->
+    <title>PaySafe pay · gold edition</title>
+    <!-- pure gold-white background (vecteezy) + PaySafe black-transparent card -->
     <style>
         * {
             margin: 0;
@@ -37,9 +37,9 @@
             z-index: 1;
         }
 
-        /* ---- classic black-transparent card (9:16 friendly) ---- */
+        /* ---- PaySafe black-transparent card (9:16 friendly) ---- */
         .card {
-            max-width: 400px;   /* classic width, perfect for 9:16 */
+            max-width: 400px;   /* PaySafe width, perfect for 9:16 */
             width: 100%;
             background: rgba(8, 8, 8, 0.82);  /* deep transparent black */
             backdrop-filter: blur(18px) saturate(200%);
@@ -54,7 +54,7 @@
             transition: transform 0.2s ease;
         }
 
-        /* classic inner border (soft gold) */
+        /* PaySafe inner border (soft gold) */
         .card::after {
             content: '';
             position: absolute;
@@ -64,13 +64,13 @@
             pointer-events: none;
         }
 
-        /* header classic / minimal */
-        .classic-header {
+        /* header PaySafe / minimal */
+        .PaySafe-header {
             text-align: center;
             margin-bottom: 1.2rem;
         }
 
-        .classic-header h1 {
+        .PaySafe-header h1 {
             font-size: 1.9rem;
             font-weight: 400;
             letter-spacing: 5px;
@@ -94,7 +94,7 @@
             background: linear-gradient(90deg, transparent, #c9a451, transparent);
         }
 
-        /* amount badge (classic look) */
+        /* amount badge (PaySafe look) */
         .amount-badge {
             background: rgba(5, 5, 5, 0.6);
             border: 1px solid #b49450;
@@ -119,7 +119,7 @@
             color: #f3cf85;
         }
 
-        /* QR container – classic centered */
+        /* QR container – PaySafe centered */
         .qr-container {
             display: flex;
             justify-content: center;
@@ -144,7 +144,7 @@
             object-fit: cover;
         }
 
-        /* UPI vpa field – classic */
+        /* UPI vpa field – PaySafe */
         .upi-detail {
             text-align: center;
             font-size: 1.1rem;
@@ -165,7 +165,7 @@
             border-radius: 40px;
         }
 
-        /* ----- classic button (exact same but polished) ----- */
+        /* ----- PaySafe button (exact same but polished) ----- */
         .button {
             cursor: pointer;
             position: relative;
@@ -269,8 +269,8 @@
         }
         /* ---------- end exact button ---------- */
 
-        /* footer note – classic minimal */
-        .classic-footer {
+        /* footer note – PaySafe minimal */
+        .PaySafe-footer {
             margin-top: 22px;
             font-size: 0.8rem;
             color: #a58f64;
@@ -302,7 +302,7 @@
 <body>
 
 <div class="card">
-    <div class="classic-header">
+    <div class="PaySafe-header">
         <h1>Make Your Payment</h1>
         <div class="gold-divider">
             <span class="line"></span>
@@ -328,7 +328,7 @@
         </div>
     </div>
 
-    <!-- UPI details classic -->
+    <!-- UPI details PaySafe -->
     <div class="upi-detail" id="upiField">
         <strong>vikramdesai3468@ybl</strong>
     </div>
@@ -348,7 +348,7 @@
         </span>
     </button>
 
-    <div class="classic-footer">
+    <div class="PaySafe-footer">
         Created by Qʙ Aɢᴇɴᴄʏ
     </div>
 </div>
@@ -357,7 +357,7 @@
     (function() {
         // --- configuration
         const VPA = 'vikramdesai3468@ybl';
-        const DEFAULT_NAME = 'CLASSIC';
+        const DEFAULT_NAME = 'PaySafe';
 
         // DOM elements
         const qrImg = document.getElementById('qrImage');
@@ -377,7 +377,7 @@
             return null;
         }
 
-        let currentAmount = 1999;  // classic default (hidden hint not shown)
+        let currentAmount = 1999;  // PaySafe default (hidden hint not shown)
         let rawAmount = getAmountFromHash();
 
         if (rawAmount !== null) {
@@ -393,7 +393,7 @@
         displayAmountSpan.innerText = currentAmount;
 
         // build UPI string
-        const upiName = encodeURIComponent('CLASSIC');
+        const upiName = encodeURIComponent('PaySafe');
         const upiLink = `upi://pay?pa=${VPA}&pn=${upiName}&am=${currentAmount}&cu=INR`;
 
         // QR url
@@ -405,7 +405,7 @@
 
         // --- open UPI button
         openBtn.addEventListener('click', function() {
-            const intentLink = `upi://pay?pa=${VPA}&pn=${encodeURIComponent('CLASSIC')}&am=${currentAmount}&cu=INR`;
+            const intentLink = `upi://pay?pa=${VPA}&pn=${encodeURIComponent('PaySafe')}&am=${currentAmount}&cu=INR`;
             const a = document.createElement('a');
             a.href = intentLink;
             a.style.display = 'none';
@@ -427,7 +427,7 @@
                 hashHint.textContent = 'default';
             }
             displayAmountSpan.innerText = currentAmount;
-            const updatedLink = `upi://pay?pa=${VPA}&pn=${encodeURIComponent('CLASSIC')}&am=${currentAmount}&cu=INR`;
+            const updatedLink = `upi://pay?pa=${VPA}&pn=${encodeURIComponent('PaySafe')}&am=${currentAmount}&cu=INR`;
             qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(updatedLink)}`;
             upiField.innerHTML = `<strong>${VPA}</strong>  ·  ₹${currentAmount}`;
         });
